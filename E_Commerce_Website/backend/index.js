@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const { type } = require('os');
+const { error } = require('console');
 require('dotenv').config();
 const app = express();
 
@@ -119,10 +120,138 @@ app.get('/allproducts',async (req,res)=>{
     res.send(products);
 })
 
+//Schema creating for user model
+const Users = mongoose.model('Users',{
+    name:{
+        type: String
+    },
+    email:{
+        type: String,
+        unique: true
+    },
+    password:{
+        type: String
+    },
+    cartData:{
+        type: Object,
+    },
+    date:{
+        type:Date,
+        default: Date.now()
+    }
+})
+
+// Creating Endpoint for registering the user
+app.post('/signup', async(req,res)=>{
+    let check = await Users.findOne({email:req.body.email})
+    if(check){
+        return res.json({success:false,errors:"existing user found with same email address"})
+    }
+    let cart = {};
+    for(let i = 0; i < 300; i++){
+        cart[i] = 0;
+    }
+    const user = new Users({
+        name:req.body.username,
+        email: req.body.email,
+        password:req.body.password,
+        cartData:cart
+    })
+    await user.save();
+    const data = {
+        user:{
+            id:user.id
+        }
+    }
+
+    const token = jwt.sign(data,'secret_ecom');
+    res.json({success:true,token})
+})
+
+// Creating endpoint for user login
+app.post('/login',async(req,res)=>{
+    let user = await Users.findOne({email:req.body.email});
+    if(user){
+        const passCompare = req.body.password === user.password;
+        if(passCompare){
+            const data = {
+                user:{
+                    id:user.id
+                }
+            }
+            const token = jwt.sign(data,'secret_ecom');
+            res.json({success:true,token});
+        }
+        else{
+            res.json({success:false,errors:"Wrong Password"});
+        }
+    }
+    else{
+        res.json({success:false,errors:"Wrong Email Id"})
+    }
+})
+
+// creating endpoint for newcollection data
+app.get('/newcollections',async(req,res)=>{
+    let products = await Product.find({});
+    let newcollection = products.slice(1).slice(-8);
+    console.log("NewCollection Fetched");
+    res.send(newcollection);
+})
+
+// creating endpoint for popular in youth data
+app.get('/popularinyouth',async(req,res)=>{
+    let products = await Product.find({category:"clothing"});
+    let popular_in_youth = products.slice(0,4);
+    console.log("Popular in Youth fetched");
+    res.send(popular_in_youth);
+})
+
+// creating middleware to fetch user
+const fetchUser = async(req,res,next)=>{
+    const token = req.header('auth-token');
+    if(!token){
+        res.send({errors:"Please authenticate using valid token"});
+    }
+    else{
+        try{
+
+            const data = jwt.verify(token,'secret_ecom');
+            req.user = data.user;
+            next();
+        } catch(error){
+            res.send({errors:"please authenticate using a valid token"});
+        }
+    }
+}
 
 
+// creating endpoint for adding products in cartdata
+app.post('/addtocart',fetchUser,async(req,res)=>{
+    let userData = await Users.findOne({_id:req.user.id});
+    userData.cartData[req.body.itemId] += 1;
+    await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+    res.send("Added");
 
+})
 
+// creating endpoint to remove product from cart
+app.post('/removefromcart',fetchUser,async(req,res)=>{
+    let userData = await Users.findOne({_id:req.user.id});
+    if(userData.cartData[req.body.itemId]>0)
+    userData.cartData[req.body.itemId] -= 1;
+    await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+    res.send("Removed");
+
+})
+
+// creating endpoint to get cartdata
+app.post('/getcart',fetchUser,async(req,res)=>{
+    console.log("GetCart");
+    let userData = await Users.findOne({_id:req.user.id});
+    res.json(userData.cartData);
+
+})
 
 mongoose.connect(process.env.MongoDB_Url)
     .then(()=>{
