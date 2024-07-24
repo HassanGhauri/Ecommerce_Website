@@ -1,27 +1,68 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { createContext, useState } from "react";
-import all_product from "../Components/Assets/all_product";
-
+import React, { createContext, useEffect, useState } from "react";
+import axios from 'axios'
 export const ShopContext = createContext(null);
 
 const getDefaultCart = () => {
   let cart = {};
-  for (let index = 0; index < all_product.length + 1; index++) {
+  for (let index = 0; index < 300+ 1; index++) {
     cart[index] = 0;
   }
   return cart;
 };
 
 const ShopContextProvider = (props) => {
+  const[all_product,setAll_Product] = useState([]);
   const [cartItems, setCartItems] = useState(getDefaultCart());
+
+  useEffect(()=>{
+    axios.get("http://localhost:4000/allproducts")
+    .then((data)=>{
+      setAll_Product(data.data);
+    })
+    if(localStorage.getItem('auth-token')){
+      axios.post("http://localhost:4000/getcart",{body:""},{
+        headers:{
+          "auth-token":`${localStorage.getItem('auth-token')}`,
+          "content-type":"application/json",
+        }
+      }).then((data)=>{
+        setCartItems(data.data);
+      })
+    }
+  },[]);
 
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-    console.log(cartItems);
+    if(localStorage.getItem('auth-token')){
+      axios.post("http://localhost:4000/addtocart",JSON.stringify({"itemId":itemId}),{
+        headers: {
+          "auth-token":`${localStorage.getItem('auth-token')}`,
+          "content-type":"application/json",
+        }
+      })
+      .then((data)=>{
+        console.log(data.data);
+      })
+    }
   };
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    if(localStorage.getItem('auth-token')){
+      axios.post("http://localhost:4000/removefromcart",JSON.stringify({"itemId":itemId}),{
+        headers: {
+          "auth-token":`${localStorage.getItem('auth-token')}`,
+          "content-type":"application/json",
+        }
+      })
+      .then((data)=>{
+        console.log(data.data);
+      })
+    }
+
+
+  
   };
 
   const getTotalCartAmount = () => {
