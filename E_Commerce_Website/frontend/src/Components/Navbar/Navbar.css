@@ -86,7 +86,69 @@
 }
 
 
+@media(max-width:1010px){
+    .navbar{
+        /* padding: 12px 50px; */
+    }
+    .nav-logo span{
+        font-size: 60px;
+    }
+    .nav-logo p{
+        font-size: 19px;
+    }
+    .nav-menu{
+        gap: 15px;
+        font-size: 19px;
+    }
+    .nav-login-cart{
+        gap: 25px;
+    }
+    .nav-login-cart button{
+        width: 70px;
+        height: 25px;
+        font-size: 13px;
+    }
+    .nav-login-cart span{
+        font-size: 30px;
+    }
+    .nav-cart-count{
+        width: 15px;
+        height: 15px;
+        font-size: 10px;
+    }
+}
 
+@media(max-width: 768px){
+    .navbar{
+        /* padding: 12px 50px; */
+    }
+    .nav-logo span{
+        font-size: 60px;
+    }
+    .nav-logo p{
+        font-size: 14px;
+    }
+    .nav-menu{
+        gap: 15px;
+        font-size: 14px;
+    }
+    .nav-login-cart{
+        gap: 25px;
+    }
+    .nav-login-cart button{
+        width: 50px;
+        height: 20px;
+        font-size: 14px;
+    }
+    .nav-login-cart span{
+        font-size: 30px;
+    }
+    .nav-cart-count{
+        width: 15px;
+        height: 15px;
+        font-size: 10px;
+    }
+}
 
 
 

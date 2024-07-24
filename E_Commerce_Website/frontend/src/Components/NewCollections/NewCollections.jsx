@@ -1,9 +1,17 @@
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './NewCollections.css'
-import new_collection from '../Assets/new_collection'
 import Item from '../Item/Item'
+import axios from 'axios'
 const NewCollections = () => {
+  const [new_collection,setNew_collection] = useState([]);
+
+  useEffect(()=>{
+    axios.get("http://localhost:4000/newcollections")
+    .then((data)=>{
+      setNew_collection(data.data);
+    })
+  },[])
   return (
     <div className='new-collections'>
       <h1>NEW COLLECTIONS</h1>
