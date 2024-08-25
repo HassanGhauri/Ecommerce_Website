@@ -3,19 +3,15 @@
 import React,{useContext} from 'react'
 import './CSS/ShopCategory.css'
 import { ShopContext } from '../Context/ShopContext'
-import { RiArrowDropDownLine } from "react-icons/ri";import Item from '../Components/Item/Item';
+import Item from '../Components/Item/Item';
 const ShopCategory = (props) => {
   const {all_product} = useContext(ShopContext)
   return (
     <div className='shop-category'>
       <img className='shopcategory-banner' src={props.banner} alt=''/>
-      <div className='shopcategory-indexSort'>
-        <p>
-          <span>Showing 1-12</span> out of 36
-        </p>
-        <div className='shopcategory-sort'>
-          sort by <span><RiArrowDropDownLine/></span>
-        </div>
+      <div className='new-collections'>
+        <h1>Products</h1>
+        <hr/>
       </div>
       <div className='shopcategory-products'>
         {all_product.map((item,i)=>{
@@ -25,9 +21,6 @@ const ShopCategory = (props) => {
             return null;
           }
         })}
-      </div>
-      <div className='shopcategory-loadmore'>
-        Explore More
       </div>
     </div>
   )
