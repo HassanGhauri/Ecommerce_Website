@@ -29,7 +29,6 @@ const ProductDisplay = (props) => {
                 <span><TiStarFullOutline/></span>
                 <span><TiStarFullOutline/></span>
                 <span><TiStarOutline/></span>
-                <p>(122)</p>
             </div>
             <div className='productdisplay-right-prices'>
                 <div className='productdisplay-right-price-old'>${product.old_price}</div>
@@ -37,7 +36,7 @@ const ProductDisplay = (props) => {
 
             </div>
             <div className='productdisplay-right-description'>
-                A lightweight casual blue and white shirt with blue jeans and white PT shoes.
+                {product.name}
             </div>
             <div className='productdisplay-right-size'>
                 <h1>Select Size</h1>
@@ -50,7 +49,6 @@ const ProductDisplay = (props) => {
                 </div>
             </div>
             <button onClick={()=>{addToCart(product.id)}}>ADD TO CART</button>
-            <p className='productdisplay-right-category'><span>Category:<span>T-shirt,Casual Dress</span></span></p>
             <p className='productdisplay-right-category'><span>Tag:<span>Modern, Latest</span></span></p>
         </div>
     </div>
