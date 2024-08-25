@@ -23,3 +23,14 @@
     margin-top: 50px;
     gap: 30px;
 }
+
+@media(max-width:700px){
+    .collections{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    .new-collections h1{
+        font-size: 30px;
+    }
+}
