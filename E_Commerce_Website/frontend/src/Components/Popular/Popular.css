@@ -22,3 +22,17 @@
     display: flex;
     gap: 20px;
 }
+
+@media(max-width:660px){
+    .popular-item{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    .popular{
+        height: 240vh;
+    }
+    .popular h1{
+        font-size: 35px;
+    }
+}
