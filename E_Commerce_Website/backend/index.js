@@ -120,6 +120,15 @@ app.get('/allproducts',async (req,res)=>{
     res.send(products);
 })
 
+// Creating api for getting all related products
+app.post('/relatedproducts',async (req,res)=>{
+
+    let products = await Product.find({category:req.body.category}).limit(4);
+    
+    console.log("All Products Fetched");
+    res.send(products);
+})
+
 //Schema creating for user model
 const Users = mongoose.model('Users',{
     name:{
@@ -138,6 +147,55 @@ const Users = mongoose.model('Users',{
     date:{
         type:Date,
         default: Date.now()
+    }
+})
+
+//Schema creating for admin model
+const Admins = mongoose.model('Admins',{
+    email:{
+        type: String,
+        unique: true
+    },
+    password:{
+        type: String
+    },
+    date:{
+        type:Date,
+        default: Date.now()
+    }
+})
+//Schema creating admin api
+app.post("/admin", async (req, res) => {
+    const {email, password} = req.body;
+    try {
+      const admin = await Admins.create({ email, password});
+      res.status(200).json(admin);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+
+// Creating endpoint for admin login
+app.post('/adminlogin',async(req,res)=>{
+    let admin = await Admins.findOne({email:req.body.email});
+    if(admin){
+        const passCompare = req.body.password === admin.password;
+        if(passCompare){
+            const data = {
+                admin:{
+                    id:admin.id
+                }
+            }
+            const token = jwt.sign(data,'secret_ecom');
+            res.json({success:true,token});
+        }
+        else{
+            res.json({success:false,errors:"Wrong Password"});
+        }
+    }
+    else{
+        res.json({success:false,errors:"Wrong Email Id"})
     }
 })
 
@@ -166,6 +224,34 @@ app.post('/signup', async(req,res)=>{
 
     const token = jwt.sign(data,'secret_ecom');
     res.json({success:true,token})
+})
+
+const Subscribers = mongoose.model('Subscribers',{
+    email:{
+        type: String,
+        unique: true
+    },
+    date:{
+        type:Date,
+        default: Date.now()
+    }
+})
+//Creating endpoint for subscribing
+app.post('/subscribe', async(req,res)=>{
+    let check = await Subscribers.findOne({email:req.body.email})
+    if(check){
+        return res.json({success:false,errors:"user with this email has already subscribed!"})
+    }
+    const subscriber = new Subscribers({
+        email: req.body.email,
+    })
+    await subscriber.save();
+    const data = {
+        subscriber:{
+            id:subscriber.id
+        }
+    } 
+    res.json({success:true})
 })
 
 // Creating endpoint for user login
