@@ -62,40 +62,93 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-}
-
-.cartitems-promocode{
-    flex: 1;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.cartitems-promocode p{
-    color: #555;
-}
-.cartitems-promobox{
-    width: 504px;
-    margin-top: 15px;
-    padding-left: 20px;
-    height: 58px;
-    background: #eaeaea;
-}
-
-.cartitems-promobox input{
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 16px;
-    width: 330px;
-    height: 50px;
-}
-.cartitems-promobox button{
-    width: 170px;
-    height: 58px;
-    font-size: 16px;
-    background: black;
-    color: white;
-    cursor: pointer;
+    border-radius: 5px;
 }
 
 
+@media(max-width:1024px){
+    .cartitems-format-main{
+    /* grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr; */
+    /* align-items: center; */
+    gap: 55px;
+    /* padding: 20px 0px; */
+    font-size: 15px;
+    font-weight: 600;
+    }
+}
+
+@media(max-width:910px){
+    .cartitems-format-main{
+    grid-template-columns: 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;  
+    /* align-items: center; */
+    gap: 30px;
+    /* padding: 20px 0px; */
+    font-size: 13px;
+    font-weight: 600;
+    }
+}
+
+@media(max-width:800px){
+    .cartitems{
+        margin-left: 100px;
+    }
+    .cartitems-format-main{
+    
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600; 
+    }
+}
+
+@media(max-width:700px){
+    .cartitems{
+        margin-left: 30px;
+        margin-right: 10px;
+    }
+    .cartitems-format-main{
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600; 
+    }
+}
+
+@media(max-width:620px){
+    .cartitems{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .cartitems-format-main{
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 400; 
+    }
+    .cartitems-quantity{
+        width: 30px;
+        height: 30px;
+    }
+    .cartitems-remove-icon{
+        font-size: 20px;
+    }
+}
+
+@media(max-width:480px){
+    .cartitems{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .cartitems-format-main{
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 400; 
+    }
+    .cartitems-quantity{
+        width: 30px;
+        height: 30px;
+    }
+    .cartitems-remove-icon{
+        font-size: 20px;
+    }
+}
